@@ -1,4 +1,5 @@
-"use strict";
+import saldoComponent from './saldo.js';
+import Conta from '../Types/conta.js';
 const formElemento = document.querySelector('.block-nova-transacao form');
 formElemento.addEventListener('submit', function (event) {
     event.preventDefault();
@@ -12,22 +13,12 @@ formElemento.addEventListener('submit', function (event) {
     let tipo = inputTipo.value;
     let valor = inputValor.valueAsNumber;
     let data = new Date(inputData.value);
-    if (tipo == tipoTrasacao.DEPOSITO) {
-        saldo += valor;
-    }
-    else if (tipo == tipoTrasacao.TRASFERENCIA || tipo == tipoTrasacao.BOLETO) {
-        saldo -= valor;
-    }
-    else {
-        alert('Transação invalida');
-        return;
-    }
-    saldoElemento.textContent = formartarMoeda(saldo);
-    let transacao = {
-        tipo: tipo,
+    let novaTransacao = {
+        tipoTrasacao: tipo,
         valor: valor,
         data: data
     };
-    console.log(transacao);
+    Conta.resgistrarTransacao(novaTransacao);
+    saldoComponent.atualizar();
     formElemento.reset();
 });

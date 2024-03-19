@@ -1,5 +1,5 @@
-enum tipoTrasacao {
+export enum tipoTrasacao {
         DEPOSITO = "Depósito",
-        TRASFERENCIA = 'Transferência',
+        TRANSFERENCIA = 'Transferência',
         BOLETO = 'Pagamento de Boleto'
 }
