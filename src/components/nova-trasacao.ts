@@ -3,9 +3,6 @@ import { tipoTrasacao } from '../Types/tipo-trasacao.js'
 import saldoComponent from './saldo.js'
 import  Conta  from '../Types/conta.js'
 
-
-
-
 const formElemento = document.querySelector('.block-nova-transacao form') as HTMLFormElement
 
 formElemento.addEventListener('submit', function (event) {

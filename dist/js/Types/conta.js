@@ -1,5 +1,15 @@
 import { tipoTrasacao } from "./tipo-trasacao.js";
-let saldo = 3000;
+let saldo = JSON.parse(localStorage.getItem('saldo') || "0");
+const transacoesJSON = localStorage.getItem('transacoes');
+let transacoes = [];
+if (transacoesJSON !== null) {
+    transacoes = JSON.parse(transacoesJSON, (key, value) => {
+        if (key === 'data') {
+            return new Date(value);
+        }
+        return value;
+    });
+}
 function debitar(valor) {
     if (valor <= 0) {
         throw new Error('O valor a ser debitado deveser maior que 0');
@@ -8,12 +18,14 @@ function debitar(valor) {
         throw new Error('Saldo insuficiente');
     }
     saldo -= valor;
+    localStorage.setItem('saldo', saldo.toLocaleString());
 }
 function depositar(valor) {
     if (valor <= 0) {
         throw new Error('O valor a ser depositado deveser maior que 0');
     }
     saldo += valor;
+    localStorage.setItem('saldo', saldo.toLocaleString());
 }
 const Conta = {
     getSaldo() {
@@ -21,6 +33,24 @@ const Conta = {
     },
     getDate() {
         return new Date;
+    },
+    getGrupotrasacoes() {
+        const grupoTransacoes = [];
+        const listaTransacoes = structuredClone(transacoes);
+        const transacoesOrdenadas = listaTransacoes.sort((t1, t2) => t2.data.getTime() - t1.data.getTime());
+        let labelAtualGrupoTrasacao = '';
+        for (let transacao of transacoesOrdenadas) {
+            let labelGrupoTrasacao = transacao.data.toLocaleDateString('pt-br', { month: 'long', year: 'numeric' });
+            if (labelAtualGrupoTrasacao !== labelGrupoTrasacao) {
+                labelAtualGrupoTrasacao = labelGrupoTrasacao;
+                grupoTransacoes.push({
+                    label: labelGrupoTrasacao,
+                    transacoes: []
+                });
+            }
+            grupoTransacoes.at(-1)?.transacoes.push(transacao);
+        }
+        return grupoTransacoes;
     },
     resgistrarTransacao(novaTransacao) {
         if (novaTransacao.tipoTrasacao == tipoTrasacao.DEPOSITO) {
@@ -32,7 +62,9 @@ const Conta = {
         else {
             throw new Error('Transação invalida');
         }
-        console.log(novaTransacao);
+        transacoes.push(novaTransacao);
+        console.log(this.getGrupotrasacoes());
+        localStorage.setItem('trasacoes', JSON.stringify(transacoes));
     }
 };
 export default Conta;
