@@ -1,6 +1,6 @@
 import { transacao } from "./transacao.js";
 import { tipoTrasacao } from "./tipo-trasacao.js";
-import { GrupoTransacoes } from "./grupo-trasacao.js";
+import { GrupoTransacao } from "./grupo-trasacao.js";
 
 let saldo:number = JSON.parse(localStorage.getItem('saldo') || "0")
 const transacoesJSON = localStorage.getItem('transacoes');
@@ -24,7 +24,7 @@ function debitar(valor:number) {
         throw new Error('Saldo insuficiente')
     }
     saldo -= valor;
-    localStorage.setItem('saldo', saldo.toLocaleString())
+    localStorage.setItem('saldo', saldo.toString())
 }
 
 function depositar(valor:number) {
@@ -32,7 +32,7 @@ function depositar(valor:number) {
         throw new Error('O valor a ser depositado deveser maior que 0')
     }
     saldo += valor;
-    localStorage.setItem('saldo', saldo.toLocaleString())
+    localStorage.setItem('saldo', saldo.toString())
 }
 
 const Conta = {
@@ -44,8 +44,8 @@ const Conta = {
         return new Date;
     },
 
-    getGrupotrasacoes():GrupoTransacoes[] {
-        const grupoTransacoes:GrupoTransacoes[] = [];
+    getGrupotransacoes():GrupoTransacao[] {
+        const grupoTransacoes:GrupoTransacao[] = [];
         const listaTransacoes: transacao[] = structuredClone(transacoes);
         const transacoesOrdenadas:transacao[] = listaTransacoes.sort((t1, t2) => t2.data.getTime() - t1.data.getTime());
         let labelAtualGrupoTrasacao:string = '';
@@ -74,7 +74,7 @@ const Conta = {
             throw new Error('Transação invalida')
         }
         transacoes.push(novaTransacao)
-        console.log(this.getGrupotrasacoes())
+        console.log(this.getGrupotransacoes())
         localStorage.setItem('trasacoes', JSON.stringify(transacoes))
     }
 }

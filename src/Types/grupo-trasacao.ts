@@ -1,6 +1,6 @@
 import { transacao } from "./transacao.js";
 
-export type GrupoTransacoes = {
+export type GrupoTransacao = {
     label:string;
     transacoes:transacao[]
 }

@@ -18,14 +18,14 @@ function debitar(valor) {
         throw new Error('Saldo insuficiente');
     }
     saldo -= valor;
-    localStorage.setItem('saldo', saldo.toLocaleString());
+    localStorage.setItem('saldo', saldo.toString());
 }
 function depositar(valor) {
     if (valor <= 0) {
         throw new Error('O valor a ser depositado deveser maior que 0');
     }
     saldo += valor;
-    localStorage.setItem('saldo', saldo.toLocaleString());
+    localStorage.setItem('saldo', saldo.toString());
 }
 const Conta = {
     getSaldo() {
@@ -34,7 +34,7 @@ const Conta = {
     getDate() {
         return new Date;
     },
-    getGrupotrasacoes() {
+    getGrupotransacoes() {
         const grupoTransacoes = [];
         const listaTransacoes = structuredClone(transacoes);
         const transacoesOrdenadas = listaTransacoes.sort((t1, t2) => t2.data.getTime() - t1.data.getTime());
@@ -63,7 +63,7 @@ const Conta = {
             throw new Error('Transação invalida');
         }
         transacoes.push(novaTransacao);
-        console.log(this.getGrupotrasacoes());
+        console.log(this.getGrupotransacoes());
         localStorage.setItem('trasacoes', JSON.stringify(transacoes));
     }
 };
